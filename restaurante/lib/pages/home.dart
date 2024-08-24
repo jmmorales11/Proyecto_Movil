@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Necesario para SystemNavigator.pop()
 import 'package:restaurante/Fondos/GradientBackground.dart';
-import 'package:restaurante/pages/comida.dart';
 import 'package:restaurante/pages/inicio.dart';
 import 'package:restaurante/pages/salir.dart';
-// Importa el widget GradientBackground
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,26 +14,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const List<Widget> _pages = <Widget>[
     Inicio(),
-    Comida(),
     Salir(),
   ];
 
   static const List<String> _titles = [
     'Página de Inicio',
-    'Página de Comida',
     'Página de Salir',
   ];
 
   static const List<IconData> _icons = [
     Icons.home,
-    Icons.fastfood,
     Icons.exit_to_app,
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 1) {
+      _showExitConfirmationDialog(); // Mostrar el diálogo al hacer clic en "Salir"
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  void _showExitConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Text('¿Seguro que quieres salir?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Salir'),
+              onPressed: () {
+                SystemNavigator.pop(); // Cierra la aplicación
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -52,28 +78,45 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-          Row(
-            children: [
-              Text('Usuario'),
-              SizedBox(width: 8),
-              Icon(Icons.account_circle), // Icono de usuario a la derecha
-              SizedBox(width: 16), // Espacio a la derecha del icono
+          PopupMenuButton<int>(
+            onSelected: (item) {
+              if (item == 0) {
+                _showExitConfirmationDialog(); // Mostrar el diálogo al seleccionar "Salir"
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(
+                value: 0,
+                child: Row(
+                  children: [
+                    Icon(Icons.exit_to_app),
+                    SizedBox(width: 8),
+                    Text('Salir'),
+                  ],
+                ),
+              ),
             ],
+            child: Row(
+              children: [
+                Text('Usuario'),
+                SizedBox(width: 8),
+                Icon(Icons.account_circle), // Icono de usuario a la derecha
+                SizedBox(width: 16), // Espacio a la derecha del icono
+              ],
+            ),
           ),
         ],
       ),
-      body: GradientBackground(
-        child: _pages[_selectedIndex],
+      body: SafeArea(
+        child: GradientBackground(
+          child: _pages[_selectedIndex],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: 'Comida',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.exit_to_app),
