@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   static const List<String> _titles = [
-    'Página de Inicio',
+    'Home',
     'Página de Salir',
   ];
 
@@ -54,7 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               child: Text('Salir'),
               onPressed: () {
-                SystemNavigator.pop(); // Cierra la aplicación
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => Salir()),
+                );
               },
             ),
           ],
@@ -66,51 +68,116 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Row(
-          children: [
-            Icon(_icons[_selectedIndex]),
-            SizedBox(width: 8),
-            Text(_titles[_selectedIndex]),
-          ],
-        ),
-        actions: [
-          PopupMenuButton<int>(
-            onSelected: (item) {
-              if (item == 0) {
-                _showExitConfirmationDialog(); // Mostrar el diálogo al seleccionar "Salir"
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem<int>(
-                value: 0,
-                child: Row(
-                  children: [
-                    Icon(Icons.exit_to_app),
-                    SizedBox(width: 8),
-                    Text('Salir'),
+      extendBodyBehindAppBar: true, // Extender el cuerpo detrás del AppBar
+      body: Stack(
+        children: [
+          GradientBackground(
+            child: _pages[_selectedIndex],
+          ),
+          // Colocamos el AppBar en la parte superior del Stack
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                AppBar(
+                  backgroundColor: Colors
+                      .transparent, // Hacer el fondo del AppBar transparente
+                  elevation: 0, // Eliminar la sombra del AppBar
+                  title: Row(
+                    children: [
+                      Icon(_icons[_selectedIndex]),
+                      SizedBox(width: 8),
+                      Text(_titles[_selectedIndex]),
+                    ],
+                  ),
+                  actions: [
+                    PopupMenuButton<int>(
+                      onSelected: (item) {
+                        if (item == 0) {
+                          _showExitConfirmationDialog(); // Mostrar el diálogo al seleccionar "Salir"
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem<int>(
+                          value: 0,
+                          child: Row(
+                            children: [
+                              Icon(Icons.exit_to_app),
+                              SizedBox(width: 8),
+                              Text('Salir'),
+                            ],
+                          ),
+                        ),
+                      ],
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 4.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Color de fondo blanco
+                              borderRadius: BorderRadius.circular(
+                                  15.0), // Bordes redondeados
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: Offset(
+                                      0, 2), // Cambiar posición de la sombra
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              'Usuario',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold, // Texto en negrita
+                                color: Colors.red, // Color principal del texto
+                                shadows: [
+                                  Shadow(
+                                    color: Colors
+                                        .yellow, // Color del detalle en amarillo
+                                    offset: Offset(1, 1),
+                                    blurRadius: 1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons
+                              .account_circle), // Icono de usuario a la derecha
+                          SizedBox(width: 16), // Espacio a la derecha del icono
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-            child: Row(
-              children: [
-                Text('Usuario'),
-                SizedBox(width: 8),
-                Icon(Icons.account_circle), // Icono de usuario a la derecha
-                SizedBox(width: 16), // Espacio a la derecha del icono
+                Align(
+                  alignment: Alignment.bottomLeft, // Alinear a la izquierda
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: 16.0, bottom: 8.0), // Margen izquierdo y abajo
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Color.fromARGB(136, 138, 127, 127), // Gris sólido
+                          Color.fromARGB(0, 138, 127, 127) // Gris transparente
+                        ],
+                      ),
+                    ),
+                    height: 20.0, // Altura del recuadro gris
+                    width: 200, // Ancho del recuadro gris
+                  ),
+                ),
               ],
             ),
           ),
         ],
-      ),
-      body: SafeArea(
-        child: GradientBackground(
-          child: _pages[_selectedIndex],
-        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -12,9 +12,7 @@ class GradientBackground extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: RadialGradient(
           colors: [
-            const Color.fromARGB(255, 207, 87, 78), // Color rojo
-            Colors.white,
-            Colors.white,
+            const Color.fromARGB(150, 207, 87, 78), // Color rojo
             Colors.white,
             Colors.white,
           ],
