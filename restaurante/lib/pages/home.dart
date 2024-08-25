@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Necesario para SystemNavigator.pop()
 import 'package:restaurante/Fondos/GradientBackground.dart';
+import 'package:restaurante/pages/Promociones.dart';
 import 'package:restaurante/pages/inicio.dart';
 import 'package:restaurante/pages/salir.dart';
 
@@ -14,21 +15,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const List<Widget> _pages = <Widget>[
     Inicio(),
+    Promociones(), // Añade la página de promociones
     Salir(),
   ];
 
   static const List<String> _titles = [
-    'Home',
-    'Página de Salir',
+    'Inicio',
+    'Promociones', // Cambia el título para promociones
+//    'Página de Salir',
   ];
 
   static const List<IconData> _icons = [
     Icons.home,
-    Icons.exit_to_app,
+    Icons.local_offer, // Icono para promociones
+    //  Icons.exit_to_app,
   ];
 
   void _onItemTapped(int index) {
-    if (index == 1) {
+    if (index == 2) {
       _showExitConfirmationDialog(); // Mostrar el diálogo al hacer clic en "Salir"
     } else {
       setState(() {
@@ -119,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white, // Color de fondo blanco
                               borderRadius: BorderRadius.circular(
-                                  15.0), // Bordes redondeados
+                                  16.0), // Bordes redondeados
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.2),
@@ -186,12 +190,12 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.exit_to_app),
-            label: 'Salir',
+            icon: Icon(Icons.local_offer), // Cambia el ícono para promociones
+            label: 'Promociones',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Color.fromARGB(169, 214, 120, 103),
         onTap: _onItemTapped,
       ),
     );
